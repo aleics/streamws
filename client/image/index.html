@@ -11,7 +11,16 @@
                 <img id="img" src=""/>
             </div>
             <div id="stats-container">
-                <b>Period: </b><span id="stats-freq"></span>
+                <div>
+                    <b>Period: </b><span id="stats-freq"></span> ms
+                    <input id="set-freq-input" type="range" style="width: 200px; position: absolute; left: 135px; top: 17px;" min="10" max="200" value="42"/>
+                </div>
+                <div>
+                    <b>Practical period time: </b><span id="stats-pr-period-time"></span>
+                </div>
+                <div>
+                    <b>Render image time: </b><span id="stats-render-time"></span> ms
+                </div>
             </div>
         </div>
     </body>

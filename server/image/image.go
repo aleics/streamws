@@ -42,7 +42,11 @@ func Freq(w http.ResponseWriter, r *http.Request) {
             w.Write([]byte("Body format invalid"))
         }
         
-        waitTime = newFreq.Val
+        
+        if newFreq.Val > 0 {
+            waitTime = newFreq.Val
+        }
+        
         return
     } else if r.Method == http.MethodGet {
         w.Write([]byte(strconv.Itoa(waitTime)))
