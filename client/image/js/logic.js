@@ -17,20 +17,25 @@ conn.onopen = function(event) {
     
 conn.onmessage = function(event) {    
     start_rend = new Date();
-    if(oldstart_rend != null) {
+    
+    if(oldstart_rend != null) { // get the "onmessage" period time
         onMsgTime = start_rend - oldstart_rend;
     }
     
-    oldstart_rend = start_rend;    
+    oldstart_rend = start_rend; // save the start time    
     
     imageUrl = urlCreator.createObjectURL(event.data);
-    img.src = imageUrl
+    img.src = imageUrl // add image to the img source
     
     end_rend = new Date();
     
-    renderTime = end_rend.getMilliseconds() - start_rend.getMilliseconds();
-    document.getElementById("stats-render-time").innerHTML = renderTime.toString();
+    renderTime = end_rend - start_rend; //get the "render" time
+    document.getElementById("stats-render-time").innerHTML = renderTime.toString(); //
     document.getElementById("stats-pr-period-time").innerHTML = onMsgTime;
+}
+
+conn.onclose = function(event) {
+    console.log("connection closed!")
 }
 
 function httpGetFreq() {

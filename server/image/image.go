@@ -26,33 +26,33 @@ type freqReq struct {
 
 // Freq handler
 func Freq(w http.ResponseWriter, r *http.Request) {
-    if origin := r.Header.Get("Origin"); origin != "" {
+    if origin := r.Header.Get("Origin"); origin != "" { // add "allow-origin", "allow-methods", "origin" headers... 
         w.Header().Set("Access-Control-Allow-Origin", origin)
         w.Header().Set("Access-Control-Allow-Methods", "POST, GET, OPTIONS, PUT, DELETE")
         w.Header().Set("Access-Control-Allow-Headers",
             "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization")
     }
      
-    if r.Method == http.MethodPost {
-        decoder := json.NewDecoder(r.Body)
+    if r.Method == http.MethodPost { // POST
+        var newFreq freqReq
         
-        var newFreq freqReq   
+        decoder := json.NewDecoder(r.Body)          
         err := decoder.Decode(&newFreq)
         if err != nil {
             w.Write([]byte("Body format invalid"))
-        }
+            return
+        }        
         
-        
-        if newFreq.Val > 0 {
+        if newFreq.Val > 0 { //waitTime cannot be 0
             waitTime = newFreq.Val
-        }
-        
+        }        
         return
-    } else if r.Method == http.MethodGet {
+    } else if r.Method == http.MethodGet { // GET
         w.Write([]byte(strconv.Itoa(waitTime)))
         return
     }
     w.Write([]byte("Method '" + r.Method + "' not allowed."))
+    return
 }
 
 // HandlerImage handles the connection for the image func
@@ -74,7 +74,7 @@ func HandlerImage(w http.ResponseWriter, r *http.Request) {
             cont = 1
         }
         
-        if err := conn.WriteMessage(websocket.BinaryMessage, imgContent); err != nil { //send new file to the client
+        if err := conn.WriteMessage(websocket.BinaryMessage, imgContent); err != nil { // send image to the client
             log.Println("write: ", err)
             break
         }
